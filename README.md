@@ -28,7 +28,9 @@ Game.connect("onCreate", function()
     scrotus.alpha = 0.45
     scrotus.add()
 
-    tween = Tween.run(scrotus, {["scale.x"] = 5}, 2, Ease.cubeIn, 0)
+    tween = Tween.run(scrotus, {["scale.x"] = 5}, 2, Ease.cubeIn, {startDelay = 2, onComplete = function(t)
+        debugPrint("a tween completed!!")
+    end})
 end)
 ```
 
