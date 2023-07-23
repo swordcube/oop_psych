@@ -17,10 +17,14 @@ Sprite.create = function(tag, x, y)
         ["tag"] = tag
     }
     sprite.animation = AnimationController.create(sprite)
-    
+
     makeLuaSprite(tag, nil, x, y)
 
     --## INITIALIZING THE FUNCTIONS ##--
+    
+    sprite.loadFrames = function(image, atlasType)
+        loadFrames(sprite.tag, image, atlasType ~= nil and string.lower(atlasType) or "sparrow")
+    end
 
     sprite.loadGraphic = function(name, width, height)
         loadGraphic(sprite.tag, name, width, height)
@@ -30,19 +34,23 @@ Sprite.create = function(tag, x, y)
     sprite.setPosition = function(x, y)
         sprite.x = x
         sprite.y = y
+        return sprite
     end
 
     sprite.setGraphicSize = function(width, height)
         setGraphicSize(sprite.tag, width, height)
+        return sprite
     end
 
     sprite.updateHitbox = function()
         updateHitbox(sprite.tag)
+        return sprite
     end
 
     sprite.screenCenter = function(axes)
         if axes == nil then axes = "XY" end
         screenCenter(sprite.tag, string.upper(axes))
+        return sprite
     end
 
     sprite.destroy = function()
@@ -52,6 +60,7 @@ Sprite.create = function(tag, x, y)
 
     sprite.add = function()
         addLuaSprite(sprite.tag, true)
+        return sprite
     end
 
     setmetatable(sprite, {

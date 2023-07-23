@@ -44,3 +44,32 @@ Game.connect("onUpdate", function(elapsed)
     scrotus.alpha = getRandomFloat(0.5, 1)
 end)
 ```
+
+- Making an animated sprite
+```lua
+Game.connect("onCreate", function()
+    scrotus = Sprite.create("scrotus", 500, 300).loadGraphic("sick")
+    scrotus.loadFrames("myCoolSpritesheet")
+    scrotus.animation.add("pain", {0, 1}, 5, true)
+    scrotus.animation.play("pain")
+    scrotus.screenCenter("XY")
+    scrotus.camera = "camHUD"
+    scrotus.add()
+end)
+```
+
+- Tweening a sprite's color
+```lua
+Game.connect("onCreate", function()
+    -- code to make sprite here
+    Tween.color(scrotus, scrotus.color, Color.fromRGB(255, 165, 31), 2, Ease.linear, {
+        startDelay = 0.5, 
+        onUpdate = function(t)
+            debugPrint("tween is updating!")
+        end,
+        onComplete = function(t)
+            debugPrint("tween is completed!")
+        end
+    })
+end)
+```
