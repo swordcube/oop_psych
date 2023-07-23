@@ -8,7 +8,7 @@ There is also some utilities for math, strings, and tables in here.
 ## How to install:
 Git clone the repo or download the zip for it, then
 extract the folder in said zip or put the folder from the clone into a
-folder where your PsychEngine.exe file is located called "libs".
+folder where your PsychEngine.exe file is located called "libs/oop_psych".
 
 ## Example usage:
 - Sprites with tweening
