@@ -1,3 +1,4 @@
+local AnimationController = require("libs/oop_psych/animation/AnimationController")
 local LuaUtil = require("libs/oop_psych/utils/LuaUtil")
 
 local Sprite = {}
@@ -15,6 +16,8 @@ Sprite.create = function(tag, x, y)
     local sprite = {
         ["tag"] = tag
     }
+    sprite.animation = AnimationController.create(sprite)
+    
     makeLuaSprite(tag, nil, x, y)
 
     --## INITIALIZING THE FUNCTIONS ##--

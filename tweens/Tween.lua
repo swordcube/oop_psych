@@ -1,9 +1,11 @@
 local TweenManager = require("libs/oop_psych/managers/TweenManager")
 local Ease = require("libs/oop_psych/tweens/Ease")
+local Color = require("libs/oop_psych/utils/Color")
 local MathUtil = require("libs/oop_psych/utils/MathUtil")
 
 local Tween = {}
 
+---
 --- Runs a tween on a specified sprite.
 ---
 --- @param object     table     The object/sprite to tween.
@@ -95,9 +97,38 @@ Tween.run = function(object, properties, duration, easing, options)
             local ratio = tween.progress > 1 and 1 or tween.progress
             tween.object[key] = MathUtil.lerp(initial, value, tween.easing(ratio))
         end
+
+        if tween.options.onUpdate ~= nil then
+            tween.options.onUpdate(tween)
+        end
     end
 
     TweenManager.globalManager.add(tween)
+    return tween
+end
+
+---
+--- Tweens one color to another color.
+---
+--- @param sprite    table     The sprite to apply this color to (optional, can be set to `nil`).
+--- @param from      integer   The color to tween from.
+--- @param to        integer   The color to tween to.
+--- @param duration  number    How long this tween should last for.
+--- @param easing    function  The easing function applied to the tween while it is running (optional, can be set to `nil`).
+--- @param options   table     A table of options for the tween (optional, can be set to `nil`).
+---
+Tween.color = function(sprite, from, to, duration, easing, options)
+    local rgb = Color.getRGB(from)
+    local tween = Tween.run(rgb, Color.getRGB(to), duration, easing, options)
+
+    local _f = tween.options.onUpdate
+    tween.options.onUpdate = function(t)
+        if _f ~= nil then _f(t) end
+
+        if sprite ~= nil then
+            sprite.color = Color.fromRGB(rgb.r, rgb.g, rgb.b)
+        end
+    end
     return tween
 end
 
