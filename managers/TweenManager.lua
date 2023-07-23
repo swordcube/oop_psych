@@ -2,7 +2,7 @@ local TweenManager = {
     globalManager = nil
 }
 
-TweenManager.new = function()
+TweenManager.create = function()
     local manager = {
         ["tweens"] = {}
     }

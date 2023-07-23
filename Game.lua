@@ -1,9 +1,14 @@
-local TweenManager = require("libs/oop_psych/tweens/TweenManager")
+local TweenManager = require("libs/oop_psych/managers/TweenManager")
+local KeyboardManager = require("libs/oop_psych/managers/KeyboardManager")
+local FunkinControls = require("libs/oop_psych/managers/FunkinControls")
+
 local Game = {
-    __connectedFuncs__ = {}
+    __connectedFuncs__ = {},
+    keys = KeyboardManager.create(),
+    controls = FunkinControls.create()
 }
 
-TweenManager.globalManager = TweenManager.new()
+TweenManager.globalManager = TweenManager.create()
 
 Game.connect = function(name, func)
     if Game.__connectedFuncs__[name] == nil then
@@ -40,9 +45,11 @@ onUpdate = function(elapsed)
 end
 
 setmetatable(Game, {
+    -- getter
     __index = function(_, property)
         return getProperty(property)
     end,
+    -- setter
     __newindex = function(_, property, value)
         setProperty(property, value)
     end

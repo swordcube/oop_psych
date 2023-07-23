@@ -1,4 +1,4 @@
-local TweenManager = require("libs/oop_psych/tweens/TweenManager")
+local TweenManager = require("libs/oop_psych/managers/TweenManager")
 local MathUtil = require("libs/oop_psych/utils/MathUtil")
 local Tween = {
     --- Runs a tween on a specified sprite.
@@ -25,20 +25,40 @@ local Tween = {
         end
 
         tween.finished = false
-        tween.active = true
+        tween.paused = false
         tween.startTimer = 0
         tween.progress = 0
         
         --## funcs ##--
         tween.restart = function()
             tween.finished = false
-            tween.active = true
+            tween.paused = false
             tween.startTimer = 0
             tween.progress = 0
         end
 
+        tween.pause = function()
+            tween.paused = true
+        end
+
+        tween.resume = function()
+            tween.paused = false
+        end
+
+        tween.stop = function()
+            tween.finished = true
+            tween.paused = true
+            tween.startTimer = 0
+            tween.progress = 0
+        end
+
+        tween.destroy = function()
+            TweenManager.globalManager.remove(tween)
+            tween = nil
+        end
+
         tween.update = function(elapsed)
-            if tween.finished or not tween.active then return end
+            if tween.finished or tween.paused then return end
 
             if tween.startTimer < tween.startDelay then
                 local t = tween.startTimer
@@ -47,8 +67,7 @@ local Tween = {
             end
 
             if tween.progress > 1 then
-                TweenManager.globalManager.remove(tween)
-                tween.finished = true
+                tween.stop()
                 return
             end
             tween.progress = tween.progress + (elapsed / tween.duration)
@@ -57,21 +76,6 @@ local Tween = {
                 local ratio = tween.progress > 1 and 1 or tween.progress
                 tween.object[key] = MathUtil.lerp(initial, value, tween.easing(ratio))
             end
-        end
-
-        tween.pause = function()
-            tween.active = false
-        end
-
-        tween.resume = function()
-            tween.active = true
-        end
-
-        tween.stop = function()
-            tween.finished = true
-            tween.active = false
-            tween.startTimer = 0
-            tween.progress = 0
         end
 
         TweenManager.globalManager.add(tween)

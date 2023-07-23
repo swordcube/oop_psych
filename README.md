@@ -31,3 +31,14 @@ Game.connect("onCreate", function()
     tween = Tween.run(scrotus, {["scale.x"] = 5}, 2, Ease.cubeIn, 0)
 end)
 ```
+
+- Setting properties on an object/sprite
+```lua
+Game.connect("onUpdate", function(elapsed)
+    -- you need to do scrotus["prop1.prop2"] for multiple properties
+    scrotus["scale.x"] = getRandomFloat(0, 5)
+
+    -- scrotus.property is completely fine for one property
+    scrotus.alpha = getRandomFloat(0.5, 1)
+end)
+```
