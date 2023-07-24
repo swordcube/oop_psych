@@ -20,7 +20,7 @@ TweenManager.create = function()
     end
 
     manager.update = function(elapsed)
-        for _, tween in ipairs(manager.tweens) do
+        for _, tween in pairs(manager.tweens) do
             tween.update(elapsed)
         end
     end

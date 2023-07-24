@@ -21,6 +21,10 @@ Tween.run = function(object, properties, duration, easing, options)
     if options == nil then
         options = {}
     end
+    if object == nil then
+        return
+    end
+
     local tween = {
         ["object"] = object,
         ["properties"] = properties,
@@ -30,6 +34,7 @@ Tween.run = function(object, properties, duration, easing, options)
     }
 
     --## vars ##--
+
     tween.initialProperties = {}
     for key, _ in pairs(tween.properties) do
         tween.initialProperties[key] = tween.object[key]
@@ -41,6 +46,7 @@ Tween.run = function(object, properties, duration, easing, options)
     tween.progress = 0
     
     --## funcs ##--
+
     tween.restart = function()
         tween.finished = false
         tween.paused = false
@@ -68,6 +74,7 @@ Tween.run = function(object, properties, duration, easing, options)
             tween.options.onComplete(tween)
         end
         tween.stop()
+        tween.destroy()
     end
 
     tween.destroy = function()
@@ -76,7 +83,9 @@ Tween.run = function(object, properties, duration, easing, options)
     end
 
     tween.update = function(elapsed)
-        if tween.finished or tween.paused then return end
+        if tween.object == nil or tween.finished or tween.paused then 
+            return
+        end
 
         local startDelay = tween.options.startDelay ~= nil and tween.options.startDelay or 0
 
@@ -92,6 +101,7 @@ Tween.run = function(object, properties, duration, easing, options)
             return
         end
         tween.progress = tween.progress + (elapsed / tween.duration)
+
         for key, value in pairs(tween.properties) do
             local initial = tween.initialProperties[key]
             local ratio = tween.progress > 1 and 1 or tween.progress
@@ -130,6 +140,17 @@ Tween.color = function(sprite, from, to, duration, easing, options)
         end
     end
     return tween
+end
+
+Tween.stopTweensOf = function(object)
+    for _, tween in pairs(TweenManager.globalManager.tweens) do
+        if tween.object ~= object then goto continue end
+
+        tween.stop()
+        tween.destroy()
+
+        ::continue::
+    end
 end
 
 return Tween

@@ -6,15 +6,28 @@ local StringUtil = {}
 --- @param delimiter string  The delimiter to split the string by.
 ---
 StringUtil.split = function(string, delimiter)
-    if string == "" then return {} end
     local result = {}
-    local append = delimiter
-    if delimiter:match("%%") then
-        append = delimiter:gsub("%%", "")
+
+    local currentString = ""
+    for i = 1, #string + 1 do
+        local character = string:sub(i,i)
+        if delimiter ~= nil and #delimiter > 0 then
+            if character == delimiter or character == "" or character == nil then
+                table.insert(result, currentString)
+                currentString = ""
+                goto continue
+            end
+            currentString = currentString .. character
+            ::continue::
+        else
+            table.insert(result, character)
+        end
     end
-    for match in (string .. append):gmatch("(.-)" .. delimiter) do
-        table.insert(result, match)
+
+    if #result[#result] < 1 then
+        table.remove(result, #result)
     end
+
     return result
 end
 
