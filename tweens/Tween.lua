@@ -1,7 +1,7 @@
 local TweenManager = require("libs/oop_psych/managers/TweenManager")
 local Ease = require("libs/oop_psych/tweens/Ease")
 local Color = require("libs/oop_psych/utils/Color")
-local MathUtil = require("libs/oop_psych/utils/MathUtil")
+local MathUtil = require("libs/oop_psych/math/MathUtil")
 
 local Tween = {}
 
